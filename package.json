@@ -1,0 +1,26 @@
+{
+  "name": "pointlessbot",
+  "version": "1.0.0",
+  "description": "a very pointless bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "PointlessDev/PointlessBot",
+  "keywords": [
+    "completely",
+    "legit"
+  ],
+  "author": "Pointless",
+  "license": "MIT",
+  "dependencies": {
+    "discordthingy": "latest",
+    "discord.js": "github:hydrabolt/discord.js#11.1-dev",
+    "snekfetch": "^3.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.15",
+    "@types/snekfetch": "^3.1.0",
+    "typescript": "^2.4.1"
+  }
+}
