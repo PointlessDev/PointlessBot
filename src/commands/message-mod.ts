@@ -33,6 +33,11 @@ export default class MessageModCommands {
     }))
   }
 
+  @Command({
+    name: 'randomcase',
+    aliases: ['cancerify', 'autism'],
+    authorization: Authorization.SELF
+  })
   async randomCase(message: Message, args: Arguments): Promise<void> {
     message.edit(morphText(args.contentFrom(1), (letter: string) => {
       if(Math.random() > 0.5) return letter.toUpperCase();

@@ -13,3 +13,7 @@ config.bots.forEach(bot => {
       .setLogChannel(bot.logChannel || config.logChannel)
       .addCommandDirectory('./commands')
 });
+
+process.on('unhandledRejection', err => {
+  console.error(err.stack || err);
+});

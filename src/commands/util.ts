@@ -5,7 +5,7 @@ import {Category, Command, Authorization, Arguments, CommandConstructionData, Re
 import {Message} from "discord.js";
 
 @Category('Utilities')
-class UtilCommands {
+export default class UtilCommands {
   constructor({responder}: CommandConstructionData) {
     this.responder = responder;
   }
@@ -29,5 +29,3 @@ class UtilCommands {
   }
   responder: Responder;
 }
-
-export default UtilCommands;

@@ -14,9 +14,10 @@
   "author": "Pointless",
   "license": "MIT",
   "dependencies": {
-    "discordthingy": "latest",
     "discord.js": "github:hydrabolt/discord.js#11.1-dev",
-    "snekfetch": "^3.2.4"
+    "discordthingy": "latest",
+    "snekfetch": "^3.2.4",
+    "vm2": "^3.4.6"
   },
   "devDependencies": {
     "@types/node": "^8.0.15",
