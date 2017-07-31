@@ -4,22 +4,24 @@
 import {Message} from 'discord.js';
 import {Command, Arguments, Responder, CommandConstructionData} from 'discordthingy';
 import * as snekfetch from 'snekfetch';
-import {GOOGLE_CSE_KEY} from '../config';
+import {GOOGLE_CSE_KEY, GOOGLE_CSE_CX} from '../config';
 
 const WIKIHOW_ENDPOINT = 'https://www.wikihow.com/api.php?action=query&list=search&format=json&srsearch=';
-const GOOGLE_ENDPOINT = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_CSE_KEY}&q=`;
+const GOOGLE_ENDPOINT = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_CSE_KEY}&cx=${GOOGLE_CSE_CX}&q=`;
+const GOOGLE_IMAGE_ENDPOINT = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_CSE_KEY}&searchType=image&cx=${GOOGLE_CSE_CX}&q=`;
 
 interface SnekResponse {
   body: any;
 }
 
 export default class SearchCommands {
-  constructor({responder}: CommandConstructionData){
+  private responder: Responder;
+  constructor({responder}: CommandConstructionData) {
     this.responder = responder;
   }
 
   @Command('wikihow')
-  async wikihow(message: Message, args: Arguments) {
+  public async wikihow(message: Message, args: Arguments) {
     if(!args.contentFrom(1)) return this.responder.fail(message, 'No search provided');
     message.react('🔄').then(loadingReaction => {
       const encodedQuery = encodeURIComponent(args.contentFrom(1));
@@ -60,19 +62,22 @@ export default class SearchCommands {
   }
 
   @Command({
-    name: 'google',
-    aliases: ['search']
+    aliases: ['search'],
+    name: 'google'
   })
-  async google(message: Message, args: Arguments): Promise<void> {
+  public async google(message: Message, args: Arguments): Promise<void> {
     let query = args.contentFrom(1);
     if(!query){
       this.responder.fail(message, 'No query provided!');
       return;
     }
 
-    message.react("🔄").then(loadingReaction => {
+    message.react('🔄').then(loadingReaction => {
       snekfetch.get(GOOGLE_ENDPOINT + encodeURIComponent(query)).then((res: SnekResponse) => {
         let resultCount = res.body.queries.request[0].totalResults;
+        if(!res.body.items || !res.body.items[0]) {
+          return this.responder.fail(message, 'No results found');
+        }
         let result = res.body.items[0];
         loadingReaction.remove().catch(this.responder.rejection(message, 'Removing Reaction'));
         message.channel.send({embed: {
@@ -81,7 +86,7 @@ export default class SearchCommands {
           description: result.snippet,
           url: result.link,
           footer: {
-            icon_url: "https://cdn.pixabay.com/photo/2015/10/31/12/56/google-1015752_960_720.png",
+            icon_url: 'https://cdn.pixabay.com/photo/2015/10/31/12/56/google-1015752_960_720.png',
             text: `Result 1 of ${parseInt(resultCount).toLocaleString()}`
           }
         }}).catch(e => this.responder.rejection(message, 'Adding embed'));
@@ -89,5 +94,37 @@ export default class SearchCommands {
     }).catch(this.responder.rejection(message));
   }
 
-  private responder: Responder;
+  @Command({
+    name: 'image'
+  })
+  public async googleImage(message: Message, args: Arguments): Promise<void> {
+    let query = args.contentFrom(1);
+    if(!query){
+      this.responder.fail(message, 'No query provided!');
+      return;
+    }
+
+    message.react('🔄').then(loadingReaction => {
+      snekfetch.get(GOOGLE_IMAGE_ENDPOINT + encodeURIComponent(query)).then((res: SnekResponse) => {
+        let resultCount = res.body.queries.request[0].totalResults;
+        if(!res.body.items || !res.body.items[0]) {
+          return this.responder.fail(message, 'No results found');
+        }
+        let result = res.body.items[0];
+        loadingReaction.remove().catch(this.responder.rejection(message, 'Removing Reaction'));
+        message.channel.send({embed: {
+          color: 0x4CAF50,
+          footer: {
+            icon_url: 'https://cdn.pixabay.com/photo/2015/10/31/12/56/google-1015752_960_720.png',
+            text: `Result 1 of ${parseInt(resultCount).toLocaleString()}`
+          },
+          image: {
+            url: result.link
+          },
+          title: result.snippet,
+          url: result.link
+        }}).catch(e => this.responder.rejection(message, 'Adding embed'));
+      });
+    }).catch(this.responder.rejection(message));
+  }
 }

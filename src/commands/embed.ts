@@ -1,9 +1,8 @@
 /**
  * Created by Pointless on 23/07/17.
  */
-import {Arguments, Command, CommandConstructionData, Responder} from 'discordthingy';
+import {Arguments, Command, CommandConstructionData, Responder, DefaultMessageParser} from 'discordthingy';
 import {Client, Message, TextChannel, DMChannel, GroupDMChannel, RichEmbedOptions} from 'discord.js';
-import {DefaultMessageParser} from 'discordthingy';
 
 const introWords = DefaultMessageParser.INTRO_WORDS;
 

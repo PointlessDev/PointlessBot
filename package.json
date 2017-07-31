@@ -4,7 +4,8 @@
   "description": "a very pointless bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tslint -c tslint.json -p tsconfig.json --type-check 'src/**/*.ts' --exclude '**/node_modules/**/*.ts'",
+    "lint": "tslint -c tslint.json -p tsconfig.json --type-check 'src/**/*.ts' --exclude '**/node_modules/**/*.ts'"
   },
   "repository": "PointlessDev/PointlessBot",
   "keywords": [
@@ -15,13 +16,16 @@
   "license": "MIT",
   "dependencies": {
     "discord.js": "github:hydrabolt/discord.js#11.1-dev",
-    "discordthingy": "latest",
+    "discordthingy": "^0.4.0",
+    "erlpack": "github:hammerandchisel/erlpack",
     "snekfetch": "^3.2.4",
+    "uws": "^8.14.0",
     "vm2": "^3.4.6"
   },
   "devDependencies": {
-    "@types/node": "^8.0.15",
+    "@types/node": "^8.0.17",
     "@types/snekfetch": "^3.1.0",
-    "typescript": "^2.4.1"
+    "typescript": "^2.4.2",
+    "vrsource-tslint-rules": "^5.1.0"
   }
 }
