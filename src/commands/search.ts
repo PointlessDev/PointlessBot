@@ -7,8 +7,9 @@ import * as snekfetch from 'snekfetch';
 import {GOOGLE_CSE_KEY, GOOGLE_CSE_CX} from '../config';
 
 const WIKIHOW_ENDPOINT = 'https://www.wikihow.com/api.php?action=query&list=search&format=json&srsearch=';
-const GOOGLE_ENDPOINT = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_CSE_KEY}&cx=${GOOGLE_CSE_CX}&q=`;
-const GOOGLE_IMAGE_ENDPOINT = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_CSE_KEY}&searchType=image&cx=${GOOGLE_CSE_CX}&q=`;
+const GOOGLE_ENDPOINT = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_CSE_KEY}&cx=${GOOGLE_CSE_CX}`;
+const GOOGLE_IMAGE_ENDPOINT = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_CSE_KEY}&cx=${GOOGLE_CSE_CX}&searchType=image`;
+const GOOGLE_SAFESEARCH_SETTING = '&safe=medium';
 
 interface SnekResponse {
   body: any;
@@ -67,13 +68,14 @@ export default class SearchCommands {
   })
   public async google(message: Message, args: Arguments): Promise<void> {
     let query = args.contentFrom(1);
-    if(!query){
+    if(!query) {
       this.responder.fail(message, 'No query provided!');
       return;
     }
 
     message.react('🔄').then(loadingReaction => {
-      snekfetch.get(GOOGLE_ENDPOINT + encodeURIComponent(query)).then((res: SnekResponse) => {
+      let safesearch = message.channel.nsfw ? '' : GOOGLE_SAFESEARCH_SETTING;
+      snekfetch.get(GOOGLE_ENDPOINT + safesearch + '&q=' + encodeURIComponent(query)).then((res: SnekResponse) => {
         let resultCount = res.body.queries.request[0].totalResults;
         if(!res.body.items || !res.body.items[0]) {
           return this.responder.fail(message, 'No results found');
@@ -82,13 +84,13 @@ export default class SearchCommands {
         loadingReaction.remove().catch(this.responder.rejection(message, 'Removing Reaction'));
         message.channel.send({embed: {
           color: 0x4CAF50,
-          title: result.title,
           description: result.snippet,
-          url: result.link,
           footer: {
             icon_url: 'https://cdn.pixabay.com/photo/2015/10/31/12/56/google-1015752_960_720.png',
             text: `Result 1 of ${parseInt(resultCount).toLocaleString()}`
-          }
+          },
+          title: result.title,
+          url: result.link
         }}).catch(e => this.responder.rejection(message, 'Adding embed'));
       });
     }).catch(this.responder.rejection(message));
@@ -99,13 +101,14 @@ export default class SearchCommands {
   })
   public async googleImage(message: Message, args: Arguments): Promise<void> {
     let query = args.contentFrom(1);
-    if(!query){
+    if(!query) {
       this.responder.fail(message, 'No query provided!');
       return;
     }
 
     message.react('🔄').then(loadingReaction => {
-      snekfetch.get(GOOGLE_IMAGE_ENDPOINT + encodeURIComponent(query)).then((res: SnekResponse) => {
+      let safesearch = message.channel.nsfw ? '' : GOOGLE_SAFESEARCH_SETTING;
+      snekfetch.get(GOOGLE_IMAGE_ENDPOINT + safesearch + '&q=' + encodeURIComponent(query)).then((res: SnekResponse) => {
         let resultCount = res.body.queries.request[0].totalResults;
         if(!res.body.items || !res.body.items[0]) {
           return this.responder.fail(message, 'No results found');
