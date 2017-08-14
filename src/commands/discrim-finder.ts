@@ -2,19 +2,18 @@
  * Created by Pointless on 22/07/17.
  */
 import {Message, Client} from 'discord.js';
-import {Command, Responder, CommandConstructionData} from 'discordthingy';
+import {DiscordThingy, Command, Responder} from 'discordthingy';
 
 export default class DiscrimFinderCommand {
-  constructor({client, responder}: CommandConstructionData) {
-    this.client = client;
-    this.responder = responder;
+  constructor(private thingy: DiscordThingy) {
+    this.responder = thingy.responder;
   }
 
   @Command('findDiscrim')
-  async findDiscrim(message: Message) {
+  public async findDiscrim(message: Message): Promise<void> {
     let matches = message.client.users.filter(user => user.discriminator === message.author.discriminator);
 
-    if(!matches.size) return this.responder.fail(message, 'Found nothing, try again later?');
+    if(!matches.size) return void this.responder.fail(message, 'Found nothing, try again later?');
 
     let response = `Found the following people with the discriminator '${message.author.discriminator}':
 ` + matches.map(match => ` - ${match.tag === message.author.tag ? '**[YOU]**' : ''} ${match.tag}`).join("\n");
@@ -22,6 +21,5 @@ export default class DiscrimFinderCommand {
     message.reply(response).catch(this.responder.rejection(message, 'Replying in discrim command'));
   }
 
-  client: Client;
-  responder: Responder;
+  private responder: Responder;
 }

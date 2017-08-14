@@ -7,7 +7,7 @@ import {Message} from 'discord.js';
 
 export default class EvalCommand {
   @Command('eval')
-  eval(message: Message, args: Arguments) {
+  public eval(message: Message, args: Arguments) {
     let code = args.contentFrom(1);
 
   }
