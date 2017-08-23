@@ -1,7 +1,7 @@
 /**
  * Created by Pointless on 19/07/17.
  */
-import {Message} from 'discord.js';
+import {Message, TextChannel} from 'discord.js';
 import {Command, Arguments, Responder, DiscordThingy} from 'discordthingy';
 import * as snekfetch from 'snekfetch';
 import {GOOGLE_CSE_KEY, GOOGLE_CSE_CX} from '../config';
@@ -78,7 +78,7 @@ export default class SearchCommands {
     }
 
     message.react('🔄').then(loadingReaction => {
-      let safesearch = message.channel.nsfw ? '' : GOOGLE_SAFESEARCH_SETTING;
+      let safesearch = (message.channel as any).nsfw ? '' : GOOGLE_SAFESEARCH_SETTING; // `as any` because weird glitches
       snekfetch.get(GOOGLE_ENDPOINT + safesearch + '&q=' + encodeURIComponent(query)).then((res: SnekResponse) => {
         let resultCount = res.body.queries.request[0].totalResults;
         if(!res.body.items || !res.body.items[0]) {
@@ -111,7 +111,7 @@ export default class SearchCommands {
     }
 
     message.react('🔄').then(loadingReaction => {
-      let safesearch = message.channel.nsfw ? '' : GOOGLE_SAFESEARCH_SETTING;
+      let safesearch = (message.channel as any).nsfw ? '' : GOOGLE_SAFESEARCH_SETTING;
       snekfetch.get(GOOGLE_IMAGE_ENDPOINT + safesearch + '&q=' + encodeURIComponent(query)).then((res: SnekResponse) => {
         let resultCount = res.body.queries.request[0].totalResults;
         if(!res.body.items || !res.body.items[0]) {

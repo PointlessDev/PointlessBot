@@ -30,7 +30,7 @@ export default class StatusCommand {
       ],
       footer: {
         icon_url: message.client.users.get(this.thingy.owner).displayAvatarURL,
-        text: `Pointless Bot v${require('../package.json').version}`
+        text: `Pointless Bot v${require('../../package.json').version}`
       }
     }});
   }
@@ -44,7 +44,7 @@ export default class StatusCommand {
 ${Math.floor(uptime / 60 / 60)}hrs, ${Math.floor((uptime / 60) % 60)}mins, ${Math.floor(uptime % 60)}secs`,
       footer: {
         icon_url: message.client.users.get(this.thingy.owner).displayAvatarURL,
-        text: `Pointless Bot v${require('../package.json').version}`
+        text: `Pointless Bot v${require('../../package.json').version}`
       }
     }});
   }
@@ -88,7 +88,7 @@ ${Math.floor(uptime / 60 / 60)}hrs, ${Math.floor((uptime / 60) % 60)}mins, ${Mat
       ],
       footer: {
         icon_url: message.client.users.get(this.thingy.owner).displayAvatarURL,
-        text: `Pointless Bot v${require('../package.json').version}`
+        text: `Pointless Bot v${require('../../package.json').version}`
       }
     }});
   }

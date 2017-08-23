@@ -7,6 +7,6 @@ import {Message} from 'discord.js';
 export default class HelpCommand {
   @Command()
   public async help(message: Message): Promise<Message> {
-    return message.reply('Hahahahaha, you actually think I document the commands this can do?!') as Promise<Message>;
+    return message.reply('Hahahahahaha, you actually think I document the commands this can do?!') as Promise<Message>;
   }
 }

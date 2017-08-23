@@ -1,31 +1,24 @@
 /**
  * Created by Pointless on 15/07/17.
  */
-import {Category, Command, Authorization, Arguments, CommandConstructionData, Responder} from "discordthingy";
-import {Message} from "discord.js";
+import {Command, Authorization, Arguments, DiscordThingy, Responder} from 'discordthingy';
+import {Message} from 'discord.js';
 
-@Category('Utilities')
 export default class UtilCommands {
-  constructor({responder}: CommandConstructionData) {
-    this.responder = responder;
+  private responder: Responder;
+  constructor(private thingy: DiscordThingy) {
+    this.responder = thingy.responder;
   }
   @Command({
-    name: 'eval',
-    aliases: ['run', 'sudo'],
-    authorization: Authorization.OWNER
+    authorization: Authorization.OWNER,
+    name: 'testError'
   })
-  async eval(message: Message, args: Arguments) {
-    message.reply(`:${args[1]}:`);
-    console.log('evalCommand!');
-  }
-
-  @Command({
-    name: 'testError',
-    authorization: Authorization.OWNER
-  })
-  async other(message: Message) {
+  public async other(message: Message) {
     message.reply('Throwing internal error...');
     this.responder.internalError(message, new Error('Testing Error'), 'Debug Info');
   }
-  responder: Responder;
+  @Command()
+  public async test(message: Message, args: Arguments) {
+    message.reply(':thumbsup: Tested! Arguments:  = ' + args.contentFrom(1));
+  }
 }
