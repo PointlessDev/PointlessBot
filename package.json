@@ -15,7 +15,7 @@
   "author": "Pointless",
   "license": "MIT",
   "dependencies": {
-    "discordthingy": "^0.4.0",
+    "discordthingy": "latest",
     "erlpack": "github:hammerandchisel/erlpack",
     "snekfetch": "^3.2.4",
     "uws": "^8.14.0",
