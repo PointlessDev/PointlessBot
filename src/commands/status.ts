@@ -40,7 +40,7 @@ export default class StatusCommand {
 
     message.channel.send({embed: {
       color: 0x4CAF50,
-      description: `This Pointless Bot™ has been online for\
+      description: `This Pointless Bot™ has been online for \
 ${Math.floor(uptime / 60 / 60)}hrs, ${Math.floor((uptime / 60) % 60)}mins, ${Math.floor(uptime % 60)}secs`,
       footer: {
         icon_url: message.client.users.get(this.thingy.owner).displayAvatarURL,

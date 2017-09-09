@@ -6,7 +6,7 @@ import config from './config';
 
 
 config.bots.forEach(bot => {
-  const thing = new DiscordThingy({debug: true});
+  const thing = new DiscordThingy();
   thing
       .login(bot.token)
       .setOwner(bot.owner || config.owner)

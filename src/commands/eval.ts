@@ -6,9 +6,8 @@ import {Message} from 'discord.js';
 import {VM} from 'vm2';
 
 export default class EvalCommand {
-  @Command('testeval')
+  @Command('eval')
   public eval(message: Message, args: Arguments) {
-    console.log('evaled');
     const code = args.contentFrom(1);
     const vm = new VM({
       sandbox: {
@@ -17,8 +16,15 @@ export default class EvalCommand {
       timeout: 1000
     });
     const start = process.hrtime();
-    let ret = vm.run(code);
+    let returned;
+    try {
+      returned = vm.run(code);
+    } catch(e) {
+      returned = e;
+    }
     const end = process.hrtime();
+
     console.log(start);
+    message.reply(returned);
   }
 }
