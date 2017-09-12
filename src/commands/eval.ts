@@ -1,12 +1,15 @@
 /**
  * Created by Pointless on 27/07/17.
  */
-import {Command, Arguments} from 'discordthingy';
+import {Command, Arguments, Authorization} from 'discordthingy';
 import {Message} from 'discord.js';
 import {VM} from 'vm2';
 
 export default class EvalCommand {
-  @Command('eval')
+  @Command({
+    authorization: Authorization.OWNER,
+    name: 'eval'
+  })
   public eval(message: Message, args: Arguments) {
     const code = args.contentFrom(1);
     const vm = new VM({
@@ -16,15 +19,25 @@ export default class EvalCommand {
       timeout: 1000
     });
     const start = process.hrtime();
-    let returned;
+    let desc;
+    let success = false;
     try {
-      returned = vm.run(code);
+      let returned = vm.run(code);
+      success = true;
+      if(returned instanceof Object) desc = JSON.stringify(returned, null, 2);
+      else if(typeof returned === 'string') desc = `"${returned}"`;
+      else desc = returned ? returned.toString() : returned;
     } catch(e) {
-      returned = e;
+      desc = e;
     }
-    const end = process.hrtime();
-
-    console.log(start);
-    message.reply(returned);
+    const [seconds, ns] = process.hrtime(start);
+    const ms = ns / 1000;
+    message.channel.send({embed : {
+      description: `:inbox_tray: Input:\`\`\`js\n${code}\`\`\`:outbox_tray: Output: \`\`\`${desc}\`\`\``,
+      footer: {
+        text: `${seconds ? seconds + 's, ' : ''}${ms}µs`
+      },
+      title: success ? '✅ Executed Successfully' : '❌ Execution Failed.'
+    }});
   }
 }
