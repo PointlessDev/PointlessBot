@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "@types/node": "^8.0.17",
-    "@types/snekfetch": "^3.1.0",
     "typescript": "^2.4.2",
     "vrsource-tslint-rules": "^5.1.0"
   }
