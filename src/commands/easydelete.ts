@@ -2,7 +2,6 @@
  * Created by Pointless on 16/09/17.
  */
 import {DiscordThingy, CommandClass} from 'discordthingy';
-import {Client} from 'discord.js';
 
 @CommandClass
 export default class EasyDelete {

@@ -2,7 +2,7 @@
   "name": "pointlessbot",
   "version": "5.0.0",
   "description": "a very pointless bot",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "tslint -c tslint.json -p tsconfig.json --type-check 'src/**/*.ts' --exclude '**/node_modules/**/*.ts'",
     "lint": "tslint -c tslint.json -p tsconfig.json --type-check 'src/**/*.ts' --exclude '**/node_modules/**/*.ts'"
